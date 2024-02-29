@@ -13,7 +13,6 @@ const openai = new OpenAI({
 
 export async function POST(req: Request) {
   const json = await req.json()
-  console.log('request', json)
   const { messages, previewToken } = json
   const userId = (await auth())?.user.id
 
@@ -28,13 +27,11 @@ export async function POST(req: Request) {
   }
 
   const res = await openai.chat.completions.create({
-    model: 'gpt-4',
+    model: 'gpt-4-turbo-preview',
     messages,
     temperature: 0.7,
     stream: true
   })
-
-  console.log('model', 'gpt-4', res)
 
   const stream = OpenAIStream(res, {
     async onCompletion(completion) {
